@@ -1,0 +1,201 @@
+Scala
+Functional and Object oriented programming
+The mostly used the java library
+The Advanced library design and interoperability
+Implicit Conversion
+str.toInt method and str.toFloat method
+Consider toInt method on a string, the scala compiler will find no such member,but it will find an implicit conversion that converts a java string to an instance of the scala class RichString,done implicitly
+ Every time the object was created, when object keyword is used it creates the singleton object, and added the $ symbol at the end of the class name.
+Eg
+object App {
+    def main(args: Array[String]) {
+      println("Hello, world!")
+    }
+  }
+
+will create the following
+
+ $ javap App$
+  public final class App$ extends java.lang.Object
+  implements scala.ScalaObject{
+      public static final App$ MODULE$;
+      public static {};
+      public App$();
+      public void main(java.lang.String[]);
+      public int $tag();
+  }
+
+Traits as Interface
+
+Scala is concise
+	Less effort at reading and understanding programs and fewer possibilities of defects.
+	Semicolons are optional
+	The java constructor
+		class MyClass {
+  	    		  private int index;
+      			private String name;
+  			public MyClass(int index, String name) {
+			          this.index = index;
+			          this.name = name;
+			      }
+  		}
+	The Scala constructor
+		 class MyClass(index: Int, name: String)	
+                                The derived class(the class which the object created) only constructor allowed, the base class the object was not allowed
+	      To find the upper case in the string
+		val nameHasUpperCase = name.exists(_.isUpperCase) 
+	=>In list 
+		at scala, the adding at the end of the list is slower, so prepending the list is faster,for the reverse the list and prepend it and when done it, then do the reverse to get the order needed.
+		Immutable sequence of objects that share the common type.
+		 
+		val oneTwo = List(1, 2)
+  		val threeFour = List(3, 4)
+  		val oneTwoThreeFour = oneTwo ::: threeFour
+  		println(""+ oneTwo +" and "+ threeFour +" were not mutated.")
+ 		 println("Thus, "+ oneTwoThreeFour +" is a new list.")
+	
+		 val twoThree = List(2, 3)
+ 		val oneTwoThree = 1 :: twoThree
+		println(oneTwoThree)
+
+		 val oneTwoThree = 1 :: 2 :: 3 :: Nil
+  		println(oneTwoThree)
+
+		val fruit = List("apples", "oranges", "pears")
+  		val nums = List(1, 2, 3, 4)
+  		val diag3 =List(List(1, 0, 0),List(0, 1, 0),List(0, 0, 1))
+  		val empty = List()
+
+		->The List Type
+			val fruit: List[String] = List("apples", "oranges", "pears")
+  			val nums: List[Int] = List(1, 2, 3, 4)
+ 			val diag3: List[List[Int]] =List(List(1, 0, 0),List(0, 1, 0),List(0, 0, 1))
+			 val empty: List[Nothing] = List()
+		Basic Operations on lists
+			head
+			tail	
+			isEmpty
+		->List patterns
+			
+	=>In list buffer, avoids reverse operation, It is a mutable object, build list more efficiently and prepend operations.
+		Append it by += operator
+		Prepend it by +: operator
+	When done invoke the list by toList on the ListBuffer.
+		scala> import scala.collection.mutable.ListBuffer
+  			import scala.collection.mutable.ListBuffer
+  
+  		scala> val buf = new ListBuffer[Int]             
+  			buf: scala.collection.mutable.ListBuffer[Int] = ListBuffer()
+  
+ 		 scala> buf += 1                                  
+  
+  		scala> buf += 2                                  
+  
+  		scala> buf     
+  		res11: scala.collection.mutable.ListBuffer[Int]
+    			= ListBuffer(1, 2)
+  
+  		scala> 3 +: buf                                  
+  		res12: scala.collection.mutable.Buffer[Int]
+    		     = ListBuffer(3, 1, 2)
+  
+  		scala> buf.toList
+  		res13: List[Int] = List(3, 1, 2)
+	=>Array Buffer
+		Is like an array additionally we can add and remove at  the beginning and end of the sequence.
+		All array operations are availabel, little slower due to  a layer of wrapping in the implementation.
+		Additional time to store the new array due to buffer content.
+		The no need to specify the length when declaring the array buffer, but in array the specifing the length is required.
+		 scala> import scala.collection.mutable.ArrayBuffer
+  			import scala.collection.mutable.ArrayBuffer
+		 scala> val buf = new ArrayBuffer[Int]()
+  			buf: scala.collection.mutable.ArrayBuffer[Int] = 
+    				ArrayBuffer()
+		buf +=12 for appending 
+		buf += 15 for appending
+		buf.length
+		bud(0)
+	=>Queues
+		First in first out.
+		Scala collection library provides the mutable and immutable variants of queue.
+			scala> import scala.collection.immutable.Queue
+			scala>val empty=new Queue[Int]
+		-> Append an element to an immutable queue with enqueue:
+			scala>val has1=empty.enqueue(1)
+	`	->To append multiple elements to a queue, call enqueue with a collection as its argument
+			scala>val has231=has1.enqueue(List(2,3,4))
+		->To remove an element from the head of the queue, use dequeue
+			scala>val(element,has23)=has123.dequeue
+			This method returns a pair consisting of the element at the head of the queue,and the rest of the queue with the head element removed.
+		
+		->scala>import scala.collection.mutable.Queue
+		import scala.collection.mutable.Queue
+		Scala>val queue=new Queue[String]
+		scala>queue +="a"
+		scala>queue ++= List("b","c")
+		scala>queue
+			Queue(a,b,c)
+		scala>queue.dequeue
+			String = a
+		scala> queue
+	=>Stacks
+		Last in first out
+		Both mutable and immutable versions.
+		Push element, pop element, peek without removing.
+		scala>import scala.collection.mutable.stack
+		scala>val stack=new Stack[Int]
+		scala>stack.push(1)
+		scala>stack
+			Stack(1,2)
+		scala>stack.top
+		Int=2
+		scala>stack
+			Stack(1,2)
+		scala>stack.pop
+		res10: Int=2
+		scala>stack
+			Stack(1)
+	=>Strings(via RichStrings)
+		Seq[Char] 
+		Predef has an implicit conversion from String to RichString,you can trea any String as Seq[Char], Here an example
+		scala>def hasUpperCase(s:String)=s.exists(._isUpperCase)
+		scala>hasUpperCase("Robert Frost")
+		scala>hasUpperCase(" e e esdsddsds")
+		implicitly converts the string to the RichString and consider it as the Seq[Char]
+	=>tuples
+		the tuples are also immutable, same as list and the difference is the it can contains the different element. The list should contain the list[int] and list[String] but the tuple can contain the both int and string.
+		The tuples  can return multiple objects from a method. 
+			val pair = (99, "Luftballons")
+   			 println(pair._1)
+    			println(pair._2)
+		The accessing the elements in the list can be odne list(1) due to same type return values, but in tuple the each element may be of different values, so the ._1 for the first type, and ._2 for the second type.
+	=>Array
+		The new keyword using for instantiation
+			val greetStrings = new Array[String](3)
+    			greetStrings(0) = "Hello"
+    			greetStrings(1) = ", "
+    			greetStrings(2) = "world!\n"
+    			for (i <- 0 to 2)
+      				print(greetStrings(i))
+			val greetStrings: Array[String] = new Array[String](3)
+			We can change the array at any time, so it was mutable.
+		In 2+3 its a method call.
+			Arrays are just instances of classes like any other classes in scala.
+			when we use open and closed parenthesis and apply a one or more values, wo convert the call into the method invocation apply on that variable.
+			so greetStrings(3) gets transformed into the greetString.apply(1)
+				greetStrings(0) = "Hello" 
+		will be transformed into:		
+				greetStrings.update(0,"hello")
+			Cant change the length of the array, once get instantiated.
+			
+
+  greetStrings.update(0, "Hello")
+
+		==>Case classes
+			Scala case classes are just regular classes which areimmutable by default and decomposable through pattern matching
+			Not use "new" keyword		
+			Parameters listed in case class are public and immutable by default.
+			
+		
+		
+		
